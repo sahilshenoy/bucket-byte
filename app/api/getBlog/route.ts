@@ -23,15 +23,17 @@ export async function GET(request: NextRequest) {
   };
 
   try {
+    console.log(`Fetching blog with ID: ${id}`);
     const command = new GetObjectCommand(params);
     const { Body } = await s3Client.send(command);
     
     if (!Body) {
+      console.log(`Blog content not found for ID: ${id}`);
       return NextResponse.json({ error: 'Blog content not found' }, { status: 404 });
     }
 
     const blogContent = await Body.transformToString();
-
+    console.log(`Successfully fetched blog content for ID: ${id}`);
     return NextResponse.json({ blogContent });
   } catch (error) {
     console.error('Error fetching blog content:', error);
