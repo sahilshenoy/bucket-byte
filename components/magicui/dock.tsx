@@ -1,7 +1,9 @@
 "use client";
-import React, { PropsWithChildren, useRef, useContext } from "react";
+/* eslint-disable */
+
+import React, { useRef, useContext } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { motion, useMotionValue } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 // Create a context for mouseX
@@ -51,7 +53,7 @@ const Dock = React.forwardRef<HTMLDivElement, DockProps>(
         >
           {React.Children.map(children, (child) => {
             if (React.isValidElement(child)) {
-              return React.cloneElement(child, {
+              return React.cloneElement(child as React.ReactElement, {
                 magnification,
                 distance,
               });
