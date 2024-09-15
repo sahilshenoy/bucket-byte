@@ -15,16 +15,24 @@ export default function Blog({ params }: { params: { id: string } }) {
       if (params.id) {
         try {
           console.log(`Fetching blog content for id: ${params.id}`);
-          const response = await fetch(`/api/getBlog?id=${params.id}`);
+          const response = await fetch(`https://your-api-gateway-url.amazonaws.com/stage/getBlog?id=${params.id}`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              // Add any other necessary headers here
+            },
+          });
           console.log(`Response status: ${response.status}`);
+          console.log(`Response headers:`, response.headers);
+          
+          const responseText = await response.text();
+          console.log(`Response text: ${responseText}`);
           
           if (!response.ok) {
-            const errorText = await response.text();
-            console.error(`Error response: ${errorText}`);
-            throw new Error(`Failed to fetch the blog content: ${response.status} ${response.statusText}`);
+            throw new Error(`Failed to fetch the blog content: ${response.status} ${response.statusText}\nResponse: ${responseText}`);
           }
           
-          const data = await response.json();
+          const data = JSON.parse(responseText);
           console.log('Received data:', data);
           setBlogContent(data.blogContent);
         } catch (err) {
