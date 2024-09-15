@@ -14,15 +14,23 @@ export default function Blog({ params }: { params: { id: string } }) {
     const fetchBlogContent = async () => {
       if (params.id) {
         try {
+          console.log(`Fetching blog content for id: ${params.id}`);
           const response = await fetch(`/api/getBlog?id=${params.id}`);
+          console.log(`Response status: ${response.status}`);
+          
           if (!response.ok) {
-            throw new Error('Failed to fetch the blog content');
+            const errorText = await response.text();
+            console.error(`Error response: ${errorText}`);
+            throw new Error(`Failed to fetch the blog content: ${response.status} ${response.statusText}`);
           }
+          
           const data = await response.json();
+          console.log('Received data:', data);
           setBlogContent(data.blogContent);
         } catch (err) {
-          setError('Error fetching blog content. Please try again.');
-          console.error(err);
+          const errorMessage = err instanceof Error ? err.message : String(err);
+          console.error(`Error in fetchBlogContent: ${errorMessage}`);
+          setError(`Error fetching blog content: ${errorMessage}`);
         } finally {
           setLoading(false);
         }
