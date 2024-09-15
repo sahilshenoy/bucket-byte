@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
-import { Loader2, ArrowLeft } from 'lucide-react';
+import { Loader2, ArrowLeft, Download } from 'lucide-react';
 
 export default function Blog({ params }: { params: { id: string } }) {
   const router = useRouter();
@@ -30,6 +30,16 @@ export default function Blog({ params }: { params: { id: string } }) {
     };
     fetchBlogContent();
   }, [params.id]);
+
+  const handleDownload = () => {
+    const element = document.createElement("a");
+    const file = new Blob([blogContent], {type: 'text/markdown'});
+    element.href = URL.createObjectURL(file);
+    element.download = `blog_${params.id}.md`;
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
@@ -69,13 +79,21 @@ export default function Blog({ params }: { params: { id: string } }) {
             </div>
           </div>
         </div>
-        <div className="mt-8 text-center">
+        <div className="mt-8 flex justify-center space-x-4">
           <button
             className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200"
             onClick={() => router.push('/')}
           >
             <ArrowLeft className="mr-2 h-5 w-5" />
             Back to Home
+          </button>
+          <button
+            className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200"
+            onClick={handleDownload}
+            disabled={loading || !!error}
+          >
+            <Download className="mr-2 h-5 w-5" />
+            Download Markdown
           </button>
         </div>
       </div>
