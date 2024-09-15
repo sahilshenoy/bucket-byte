@@ -15,11 +15,10 @@ export default function Blog({ params }: { params: { id: string } }) {
       if (params.id) {
         try {
           console.log(`Fetching blog content for id: ${params.id}`);
-          const response = await fetch(`https://your-api-gateway-url.amazonaws.com/stage/getBlog?id=${params.id}`, {
+          const response = await fetch(`https://nh5olre000.execute-api.us-east-1.amazonaws.com/dev/generateBlog?id=${params.id}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
-              // Add any other necessary headers here
             },
           });
           console.log(`Response status: ${response.status}`);
