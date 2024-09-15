@@ -1,5 +1,4 @@
 'use client';
-
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Loader2, PenTool } from 'lucide-react';
@@ -24,12 +23,12 @@ export default function Home() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ blogTopic: topic }),
       });
-      if (!response.ok) throw new Error('Failed to fetch the blog content');
+      if (!response.ok) throw new Error('Failed to generate the blog content');
       const data = await response.json();
-      const presignedUrl = data.presignedUrl;
-      router.push(`/blog?presignedUrl=${encodeURIComponent(presignedUrl)}`);
+      const blogId = data.blogId;
+      router.push(`/blog/${blogId}`);
     } catch (error) {
-      setError('Error fetching the blog content. Please try again.');
+      setError('Error generating the blog content. Please try again.');
       console.error('Error:', error);
     } finally {
       setIsLoading(false);

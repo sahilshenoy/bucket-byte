@@ -1,13 +1,10 @@
 'use client';
-
 import React, { useEffect, useState } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
 import { Loader2, ArrowLeft } from 'lucide-react';
 
-export default function Blog() {
-  const searchParams = useSearchParams();
-  const presignedUrl = searchParams.get('presignedUrl');
+export default function Blog({ params }: { params: { id: string } }) {
   const router = useRouter();
   const [blogContent, setBlogContent] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
@@ -15,14 +12,14 @@ export default function Blog() {
 
   useEffect(() => {
     const fetchBlogContent = async () => {
-      if (presignedUrl) {
+      if (params.id) {
         try {
-          const response = await fetch(presignedUrl);
+          const response = await fetch(`/api/getBlog?id=${params.id}`);
           if (!response.ok) {
-            throw new Error('Failed to fetch the blog content from S3');
+            throw new Error('Failed to fetch the blog content');
           }
-          const content = await response.text();
-          setBlogContent(content);
+          const data = await response.json();
+          setBlogContent(data.blogContent);
         } catch (err) {
           setError('Error fetching blog content. Please try again.');
           console.error(err);
@@ -32,7 +29,7 @@ export default function Blog() {
       }
     };
     fetchBlogContent();
-  }, [presignedUrl]);
+  }, [params.id]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
