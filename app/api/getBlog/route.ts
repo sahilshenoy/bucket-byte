@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
   }
 
   const params = {
-    Bucket: process.env.AWS_S3_BUCKET_NAME as string,
+    Bucket: process.env.S3_BUCKET_NAME as string,
     Key: `blogs/${id}.md`,
   };
 
