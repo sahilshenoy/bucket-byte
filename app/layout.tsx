@@ -14,8 +14,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Markdown Blog Generator",
-  description: "Description of the blog generator",
+  title: "BucketByte",
+  description: "Website for generating blogs using AI",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

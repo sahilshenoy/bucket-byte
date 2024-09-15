@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Loader2, PenTool } from 'lucide-react';
+import Navbar from "./navbar";
 
 export default function Home() {
   const router = useRouter();
@@ -45,7 +46,7 @@ export default function Home() {
             </div>
           </div>
           <h1 className="text-4xl font-extrabold text-center text-indigo-600 mb-6">
-            Markdown Blog Generator
+            BucketByte
           </h1>
           <p className="text-gray-600 text-center mb-8">
             Enter a topic to generate a captivating blog in markdown format
@@ -87,6 +88,7 @@ export default function Home() {
           )}
         </div>
       </div>
+      <Navbar />
     </div>
   );
 }
