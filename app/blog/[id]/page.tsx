@@ -1,21 +1,24 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
 import { Loader2, ArrowLeft, Download, AlertTriangle } from 'lucide-react';
 
-export default function Blog({ params }: { params: { id: string } }) {
+export default function Blog() {
   const router = useRouter();
+  const params = useParams(); // Use the useParams hook
+  const id = params.id; // Extract the 'id' parameter
+
   const [blogContent, setBlogContent] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
 
   useEffect(() => {
     const fetchBlogContent = async () => {
-      if (params.id) {
+      if (id) {
         try {
-          console.log(`Fetching blog content for id: ${params.id}`);
-          const url = `https://nh5olre000.execute-api.us-east-1.amazonaws.com/dev/genBlog?id=${encodeURIComponent(params.id)}`;
+          console.log(`Fetching blog content for id: ${id}`);
+          const url = `https://nh5olre000.execute-api.us-east-1.amazonaws.com/dev/genBlog?id=${encodeURIComponent(id)}`;
           console.log(`Request URL: ${url}`);
           
           const response = await fetch(url, {
@@ -56,16 +59,20 @@ export default function Blog({ params }: { params: { id: string } }) {
         } finally {
           setLoading(false);
         }
+      } else {
+        console.error('No ID found in the URL parameters.');
+        setError('No blog ID found in the URL.');
+        setLoading(false);
       }
     };
     fetchBlogContent();
-  }, [params.id]);
+  }, [id]);
 
   const handleDownload = () => {
     const element = document.createElement("a");
     const file = new Blob([blogContent], {type: 'text/markdown'});
     element.href = URL.createObjectURL(file);
-    element.download = `blog_${params.id}.md`;
+    element.download = `blog_${id}.md`;
     document.body.appendChild(element);
     element.click();
     document.body.removeChild(element);
