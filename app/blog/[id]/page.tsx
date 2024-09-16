@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
-import { Loader2, ArrowLeft, Download } from 'lucide-react';
+import { Loader2, ArrowLeft, Download, AlertTriangle } from 'lucide-react';
 
 export default function Blog({ params }: { params: { id: string } }) {
   const router = useRouter();
@@ -26,7 +26,7 @@ export default function Blog({ params }: { params: { id: string } }) {
           });
           
           console.log(`Response status: ${response.status}`);
-          console.log(`Response headers:`, response.headers);
+          console.log(`Response headers:`, Object.fromEntries(response.headers.entries()));
           
           const responseText = await response.text();
           console.log(`Response text: ${responseText}`);
@@ -71,6 +71,12 @@ export default function Blog({ params }: { params: { id: string } }) {
     document.body.removeChild(element);
   };
 
+  const handleRetry = () => {
+    setLoading(true);
+    setError('');
+    router.refresh(); // This will re-run the useEffect hook
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto">
@@ -81,14 +87,24 @@ export default function Blog({ params }: { params: { id: string } }) {
             </h1>
             <div className="prose prose-lg max-w-none">
               {loading && (
-                <div className="flex justify-center items-center h-64">
-                  <Loader2 className="animate-spin text-indigo-600" size={48} />
+                <div className="flex flex-col justify-center items-center h-64">
+                  <Loader2 className="animate-spin text-indigo-600 mb-4" size={48} />
+                  <p className="text-indigo-600">Loading blog content...</p>
                 </div>
               )}
               {error && (
                 <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6" role="alert">
-                  <p className="font-bold">Error</p>
+                  <div className="flex items-center mb-2">
+                    <AlertTriangle className="mr-2" />
+                    <p className="font-bold">Error</p>
+                  </div>
                   <p>{error}</p>
+                  <button 
+                    onClick={handleRetry}
+                    className="mt-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors duration-200"
+                  >
+                    Retry
+                  </button>
                 </div>
               )}
               {!loading && !error && blogContent && (
