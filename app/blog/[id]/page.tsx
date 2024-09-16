@@ -15,21 +15,35 @@ export default function Blog({ params }: { params: { id: string } }) {
       if (params.id) {
         try {
           console.log(`Fetching blog content for id: ${params.id}`);
-          const response = await fetch(`https://nh5olre000.execute-api.us-east-1.amazonaws.com/dev/genBlog?id=${encodeURIComponent(params.id)}`, {
+          const url = `https://nh5olre000.execute-api.us-east-1.amazonaws.com/dev/genBlog?id=${encodeURIComponent(params.id)}`;
+          console.log(`Request URL: ${url}`);
+          
+          const response = await fetch(url, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
             },
           });
+          
           console.log(`Response status: ${response.status}`);
+          console.log(`Response headers:`, response.headers);
+          
+          const responseText = await response.text();
+          console.log(`Response text: ${responseText}`);
           
           if (!response.ok) {
-            throw new Error(`Failed to fetch the blog content: ${response.status} ${response.statusText}`);
+            throw new Error(`Failed to fetch the blog content: ${response.status} ${response.statusText}\nResponse: ${responseText}`);
           }
           
-          const data = await response.json();
+          let data;
+          try {
+            data = JSON.parse(responseText);
+          } catch (parseError) {
+            console.error('Error parsing JSON:', parseError);
+            throw new Error(`Failed to parse response as JSON. Raw response: ${responseText}`);
+          }
+
           console.log('Received data:', data);
-          
           if (data.blogContent) {
             setBlogContent(data.blogContent);
           } else {
