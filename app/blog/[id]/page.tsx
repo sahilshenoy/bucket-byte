@@ -22,24 +22,14 @@ export default function Blog({ params }: { params: { id: string } }) {
             },
           });
           console.log(`Response status: ${response.status}`);
-          console.log(`Response headers:`, response.headers);
-          
-          const responseText = await response.text();
-          console.log(`Response text: ${responseText}`);
           
           if (!response.ok) {
-            throw new Error(`Failed to fetch the blog content: ${response.status} ${response.statusText}\nResponse: ${responseText}`);
+            throw new Error(`Failed to fetch the blog content: ${response.status} ${response.statusText}`);
           }
           
-          let data;
-          try {
-            data = JSON.parse(responseText);
-          } catch (parseError) {
-            console.error('Error parsing JSON:', parseError);
-            throw new Error(`Failed to parse response as JSON. Raw response: ${responseText}`);
-          }
-
+          const data = await response.json();
           console.log('Received data:', data);
+          
           if (data.blogContent) {
             setBlogContent(data.blogContent);
           } else {
