@@ -36,7 +36,7 @@ export default function Navbar() {
                   <Icons.gitHub className="size-full" />
                 </DockIcon>
             </Link>
-            <Link href="https://github.com/yourusername/bucket-byte-backend" target="_blank" rel="noopener noreferrer" passHref>
+            <Link href="https://github.com/sahilshenoy/bucket-byte-backend" target="_blank" rel="noopener noreferrer" passHref>
                 <DockIcon className="bg-black/10 dark:bg-white/10 p-3">
                   <Icons.gitHub className="size-full" />
                 </DockIcon>

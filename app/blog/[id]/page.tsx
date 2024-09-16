@@ -15,7 +15,7 @@ export default function Blog({ params }: { params: { id: string } }) {
       if (params.id) {
         try {
           console.log(`Fetching blog content for id: ${params.id}`);
-          const response = await fetch(`https://nh5olre000.execute-api.us-east-1.amazonaws.com/dev/genBlog?id=${params.id}`, {
+          const response = await fetch(`https://nh5olre000.execute-api.us-east-1.amazonaws.com/dev/genBlog?id=${encodeURIComponent(params.id)}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
