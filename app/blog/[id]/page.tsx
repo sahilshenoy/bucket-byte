@@ -7,7 +7,7 @@ import { Loader2, ArrowLeft, Download, AlertTriangle } from 'lucide-react';
 export default function Blog() {
   const router = useRouter();
   const params = useParams(); // Use the useParams hook
-  const id = params.id; // Extract the 'id' parameter
+  const id = Array.isArray(params.id) ? params.id[0] : params.id;
 
   const [blogContent, setBlogContent] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
@@ -20,24 +20,24 @@ export default function Blog() {
           console.log(`Fetching blog content for id: ${id}`);
           const url = `https://nh5olre000.execute-api.us-east-1.amazonaws.com/dev/genBlog?id=${encodeURIComponent(id)}`;
           console.log(`Request URL: ${url}`);
-          
+
           const response = await fetch(url, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
             },
           });
-          
+
           console.log(`Response status: ${response.status}`);
           console.log(`Response headers:`, Object.fromEntries(response.headers.entries()));
-          
+
           const responseText = await response.text();
           console.log(`Response text: ${responseText}`);
-          
+
           if (!response.ok) {
             throw new Error(`Failed to fetch the blog content: ${response.status} ${response.statusText}\nResponse: ${responseText}`);
           }
-          
+
           let data;
           try {
             data = JSON.parse(responseText);
@@ -47,10 +47,13 @@ export default function Blog() {
           }
 
           console.log('Received data:', data);
-          if (data.blogContent) {
+
+          if (data && data.blogContent) {
             setBlogContent(data.blogContent);
+          } else if (data && data.error) {
+            throw new Error(`Server Error: ${data.error}`);
           } else {
-            throw new Error('Blog content is missing from the response');
+            throw new Error('Unexpected response structure from the server.');
           }
         } catch (err) {
           const errorMessage = err instanceof Error ? err.message : String(err);
@@ -69,8 +72,8 @@ export default function Blog() {
   }, [id]);
 
   const handleDownload = () => {
-    const element = document.createElement("a");
-    const file = new Blob([blogContent], {type: 'text/markdown'});
+    const element = document.createElement('a');
+    const file = new Blob([blogContent], { type: 'text/markdown' });
     element.href = URL.createObjectURL(file);
     element.download = `blog_${id}.md`;
     document.body.appendChild(element);
@@ -89,9 +92,7 @@ export default function Blog() {
       <div className="max-w-3xl mx-auto">
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
           <div className="px-6 py-8 sm:p-10">
-            <h1 className="text-4xl font-extrabold text-center text-indigo-600 mb-8">
-              Generated Blog
-            </h1>
+            <h1 className="text-4xl font-extrabold text-center text-indigo-600 mb-8">Generated Blog</h1>
             <div className="prose prose-lg max-w-none">
               {loading && (
                 <div className="flex flex-col justify-center items-center h-64">
@@ -106,7 +107,7 @@ export default function Blog() {
                     <p className="font-bold">Error</p>
                   </div>
                   <p>{error}</p>
-                  <button 
+                  <button
                     onClick={handleRetry}
                     className="mt-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors duration-200"
                   >
@@ -115,7 +116,7 @@ export default function Blog() {
                 </div>
               )}
               {!loading && !error && blogContent && (
-                <ReactMarkdown 
+                <ReactMarkdown
                   className="text-gray-800"
                   components={{
                     h1: (props) => <h1 className="text-3xl font-bold text-indigo-700 mt-8 mb-4" {...props} />,
