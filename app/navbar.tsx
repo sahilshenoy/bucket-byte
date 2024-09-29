@@ -11,12 +11,12 @@ export default function Navbar() {
           <Dock magnification={60} distance={100} className="z-50 pointer-events-auto relative mx-auto flex min-h-full h-full items-center px-1 bg-background [box-shadow:0_0_0_1px_rgba(0,0,0,.03),0_2px_4px_rgba(0,0,0,.05),0_12px_24px_rgba(0,0,0,.05)] transform-gpu dark:[border:1px_solid_rgba(255,255,255,.1)] dark:[box-shadow:0_-20px_80px_-20px_#ffffff1f_inset]">
             {/* sahil & dhwani portfolio */}
             <Link href="https://sahilshenoy.com" target="_blank" rel="noopener noreferrer" passHref>
-                <DockIcon className="bg-black/10 dark:bg-white/10 p-3">
+                <DockIcon className="bg-black/10 dark:bg-white/10 p-3 rounded-full">
                   <Icons.manLaptop className="size-full" />
                 </DockIcon>
             </Link>
             <Link href="https://dhwanibudhiraja.com" target="_blank" rel="noopener noreferrer" passHref>
-                <DockIcon className="bg-black/10 dark:bg-white/10 p-3">
+                <DockIcon className="bg-black/10 dark:bg-white/10 p-3 rounded-full">
                   <Icons.womanLaptop className="size-full" />
                 </DockIcon>
             </Link>
@@ -24,20 +24,20 @@ export default function Navbar() {
             {/* will roll out the blog after it has been created */}
             <Link href="https://www.techwithsd.com/blog/blog-bucketbyte" target="_blank" rel="noopener noreferrer" passHref>
               <div title="Blog">
-                <DockIcon className="bg-white/20 p-3 rounded-full">
-                  <Icons.blog className="w-6 h-6" />
+                <DockIcon className="bg-black/10 dark:bg-white/10 p-3 ">
+                  <Icons.blog className="size-full" />
                 </DockIcon>
               </div>
             </Link>
             <Separator orientation="vertical" className="h-full" /> 
             {/* source code for the lambda function as well as the website */}
             <Link href="https://github.com/sahilshenoy/bucket-byte" target="_blank" rel="noopener noreferrer" passHref>
-                <DockIcon className="bg-black/10 dark:bg-white/10 p-3">
+                <DockIcon className="bg-black/10 dark:bg-white/10 p-3 rounded-full">
                   <Icons.gitHub className="size-full" />
                 </DockIcon>
             </Link>
             <Link href="https://github.com/sahilshenoy/bucket-byte-backend" target="_blank" rel="noopener noreferrer" passHref>
-                <DockIcon className="bg-black/10 dark:bg-white/10 p-3">
+                <DockIcon className="bg-black/10 dark:bg-white/10 p-3 rounded-full">
                   <Icons.gitHub className="size-full" />
                 </DockIcon>
             </Link>
