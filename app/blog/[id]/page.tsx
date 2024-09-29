@@ -121,6 +121,10 @@ export default function Blog() {
                   components={{
                     h1: (props) => <h1 className="text-3xl font-bold text-indigo-700 mt-8 mb-4" {...props} />,
                     h2: (props) => <h2 className="text-2xl font-semibold text-indigo-600 mt-6 mb-3" {...props} />,
+                    h3: (props) => <h3 className="text-xl font-semibold text-indigo-600 mt-6 mb-3" {...props} />,
+                    h4: (props) => <h4 className="text-lg font-semibold text-indigo-600 mt-6 mb-3" {...props} />,
+                    h5: (props) => <h5 className="text-md font-semibold text-indigo-600 mt-6 mb-3" {...props} />,
+                    h6: (props) => <h6 className="text-sm font-semibold text-indigo-600 mt-6 mb-3" {...props} />,
                     p: (props) => <p className="mb-4 leading-relaxed" {...props} />,
                     ul: (props) => <ul className="list-disc list-inside mb-4" {...props} />,
                     ol: (props) => <ol className="list-decimal list-inside mb-4" {...props} />,
