@@ -22,14 +22,14 @@ export default function Navbar() {
             </Link>
             <Separator orientation="vertical" className="h-full" /> 
             {/* will roll out the blog after it has been created */}
-            {/* <Separator orientation="vertical" className="h-full" /> 
-            <Link href="/blog" passHref>
+            <Separator orientation="vertical" className="h-full" /> 
+            <Link href="https://www.techwithsd.com/blog/blog-bucketbyte" target="_blank" rel="noopener noreferrer" passHref>
               <div title="Blog">
                 <DockIcon className="bg-white/20 p-3 rounded-full">
                   <Icons.blog className="w-6 h-6" />
                 </DockIcon>
               </div>
-            </Link> */}
+            </Link>
             {/* source code for the lambda function as well as the website */}
             <Link href="https://github.com/sahilshenoy/bucket-byte" target="_blank" rel="noopener noreferrer" passHref>
                 <DockIcon className="bg-black/10 dark:bg-white/10 p-3">
