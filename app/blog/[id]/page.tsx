@@ -18,7 +18,7 @@ export default function Blog() {
       if (id) {
         try {
           console.log(`Fetching blog content for id: ${id}`);
-          const url = `https://nh5olre000.execute-api.us-east-1.amazonaws.com/dev/genBlog?id=${encodeURIComponent(id)}`;
+          const url = `https://nh5olre000.execute-api.us-east-1.amazonaws.com/dev/blog?id=${encodeURIComponent(id)}`;
           console.log(`Request URL: ${url}`);
 
           const response = await fetch(url, {
