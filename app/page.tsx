@@ -24,7 +24,12 @@ export default function Home() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ blogTopic: topic }),
       });
-      if (!response.ok) throw new Error('Failed to generate the blog content');
+      if (!response.ok) {
+        console.warn('Error status:', response.status);
+        const errorText = await response.text();
+        console.warn('Error body:', errorText);
+        throw new Error('Failed to generate the blog content');
+      }
       const data = await response.json();
       const blogId = data.blogId;
       router.push(`/blog/${blogId}`);

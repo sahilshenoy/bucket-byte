@@ -6,68 +6,55 @@ import { Loader2, ArrowLeft, Download, AlertTriangle } from 'lucide-react';
 
 export default function Blog() {
   const router = useRouter();
-  const params = useParams(); // Use the useParams hook
+  const params = useParams();
   const id = Array.isArray(params.id) ? params.id[0] : params.id;
 
-  const [blogContent, setBlogContent] = useState<string>('');
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string>('');
+  const [blogContent, setBlogContent] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     const fetchBlogContent = async () => {
       if (id) {
         try {
-          console.log(`Fetching blog content for id: ${id}`);
-          const url = `https://nh5olre000.execute-api.us-east-1.amazonaws.com/dev/blog?id=${encodeURIComponent(id)}`;
-          console.log(`Request URL: ${url}`);
+          setLoading(true);
+          // Using the full URL that works with curl
+          const response = await fetch(
+            `/api/getBlog?id=${encodeURIComponent(id)}`,
+            {
+              method: 'GET',
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+              },
+            }
+          );
 
-          const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          });
-
-          console.log(`Response status: ${response.status}`);
-          console.log(`Response headers:`, Object.fromEntries(response.headers.entries()));
-
-          const responseText = await response.text();
-          console.log(`Response text: ${responseText}`);
+          console.log('Response status:', response.status); // Debug log
 
           if (!response.ok) {
-            throw new Error(`Failed to fetch the blog content: ${response.status} ${response.statusText}\nResponse: ${responseText}`);
+            const errorText = await response.text();
+            console.error('Error response:', errorText); // Debug log
+            throw new Error(`HTTP error! status: ${response.status}`);
           }
 
-          let data;
-          try {
-            data = JSON.parse(responseText);
-          } catch (parseError) {
-            console.error('Error parsing JSON:', parseError);
-            throw new Error(`Failed to parse response as JSON. Raw response: ${responseText}`);
-          }
+          const data = await response.json();
+          console.log('Received data:', data); // Debug log
 
-          console.log('Received data:', data);
-
-          if (data && data.blogContent) {
+          if (data.blogContent) {
             setBlogContent(data.blogContent);
-          } else if (data && data.error) {
-            throw new Error(`Server Error: ${data.error}`);
           } else {
-            throw new Error('Unexpected response structure from the server.');
+            throw new Error('No blog content in response');
           }
-        } catch (err) {
-          const errorMessage = err instanceof Error ? err.message : String(err);
-          console.error(`Error in fetchBlogContent: ${errorMessage}`);
-          setError(`Error fetching blog content: ${errorMessage}`);
+        } catch (error) {
+          console.error('Fetch error:', error); // Debug log
+          setError(error instanceof Error ? error.message : 'Failed to fetch blog');
         } finally {
           setLoading(false);
         }
-      } else {
-        console.error('No ID found in the URL parameters.');
-        setError('No blog ID found in the URL.');
-        setLoading(false);
       }
     };
+
     fetchBlogContent();
   }, [id]);
 
